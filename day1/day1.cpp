@@ -50,7 +50,7 @@ int calculatePart2(std::ifstream& ifs) {
 }
 
 int main() {
-    std::ifstream ifs(std::string(ROOT_DIR) + "/1/input.txt");
+    std::ifstream ifs(std::string(ROOT_DIR) + "/day1/input.txt");
     std::cout << "part 1 result is = " << calculatePart1(ifs) << std::endl;
     clear(ifs);
     std::cout << "part 2 result is = " << calculatePart2(ifs) << std::endl;
