@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <assert.h>
 
 const int LETTERS = 26;
 
@@ -42,9 +43,35 @@ int calculatePart1(std::vector<std::string> lines) {
     return twices * thrices;
 }
 
+std::string calculatePart2(std::vector<std::string> lines) {
+    for (int line1 = 0; line1 < lines.size(); line1++) {
+        for (int line2 = line1; line2 < lines.size(); line2++) {
+            if (line1 == line2) { continue; } // don't compare line with itself
+
+            int lineLength = lines[line1].length();
+            assert(lineLength == lines[line2].length()); // all lines must be same length
+
+            std::string sameChars("");
+
+            for (int i = 0; i < lineLength; i++) {
+                if (lines[line1][i] == lines[line2][i]) {
+                    sameChars += lines[line1][i];
+                }
+            }
+
+            // should only exist one pair which differs by exactly 1 char
+            if (sameChars.length() == lineLength - 1) {
+                return sameChars;
+            }
+        }
+    }
+    return ""; // not found
+}
+
 int main() {
     auto lines = readInput();
     std::cout << "part 1 result is = " << calculatePart1(lines) << std::endl;
+    std::cout << "part 2 result is = " << calculatePart2(lines) << std::endl;
 
     return 0;
 }
