@@ -16,13 +16,13 @@ std::vector<Rect> readInput() {
     std::ifstream ifs(std::string(ROOT_DIR) + "/day3/input.txt");
     std::string line;
     while (getline(ifs, line)) {
-        auto extract = [line](int from, int to = ~0) { return atoi(line.substr(from + 1, to - from).c_str()); };
+        auto extract = [line](size_t from, size_t to = ~0) { return atoi(line.substr(from + 1, to - from).c_str()); };
 
-        int idTag = line.find('#');
-        int posTag = line.find('@');
-        int posSeparator = line.find(',');
-        int sizeTag = line.find(':');
-        int sizeSeparator = line.find('x');
+        size_t idTag = line.find('#');
+        size_t posTag = line.find('@');
+        size_t posSeparator = line.find(',');
+        size_t sizeTag = line.find(':');
+        size_t sizeSeparator = line.find('x');
 
         Rect rect;
         rect.id = extract(idTag, posTag - idTag);
@@ -51,9 +51,33 @@ int calculatePart1(std::vector<Rect> rects) {
     return res;
 }
 
+// quick and dirty solution (duplicate of part 1!)
+int calculatePart2(std::vector<Rect> rects) {
+    uint8_t fabric[999][999] = { 0 };
+    for (auto rect : rects) {
+        for (int x = rect.x; x < rect.x + rect.width; x++) {
+            for (int y = rect.y; y < rect.y + rect.height; y++) {
+                fabric[x][y]++;
+            }
+        }
+    }
+
+    for (auto rect : rects) {
+        for (int x = rect.x; x < rect.x + rect.width; x++) {
+            for (int y = rect.y; y < rect.y + rect.height; y++) {
+                if(fabric[x][y] != 1) { goto next; } // skip to next if any pos overlaps
+            }
+        }
+        return rect.id; // found!
+        next: continue; // goto is nice
+    }
+    return 0;
+}
+
 int main() {
     auto rects = readInput();
     std::cout << "part 1 result is = " << calculatePart1(rects) << std::endl;
+    std::cout << "part 2 result is = " << calculatePart2(rects) << std::endl;
 
     return 0;
 }
